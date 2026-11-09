@@ -1,0 +1,306 @@
+.login-container {
+    background-color: #091242;
+    color: white;
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 400px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.login-form {
+    background-color: white;
+    border-radius: 10px;
+    padding: 40px;
+    text-align: right;
+    height: 400px;
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container img {
+    width: 150px;
+    height: auto;
+}
+
+.login-form > div:first-child {
+    color: #091242;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"],
+.login-form input[type="submit"] {
+    font-size: 18px;
+    padding: 10px 0;
+    width: 100%;
+    margin-bottom: 20px;
+    border: none;
+    border-bottom: 2px solid blueviolet;
+    border-radius: 0;
+    background-color: transparent;
+}
+
+.no-account-create {
+    display: flex;
+}
+
+.no-account {
+    color: black;
+}
+
+.create-account {
+    color: blue;
+}
+
+.google-login-text {
+    color: black;
+}
+
+.google-login {
+    display: flex;
+    align-items: center;
+}
+
+.google-login-button {
+    background-color: white;
+    color: blue;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.google-login-button svg {
+    margin-right: 15px;
+}
+
+.google-login-button:hover {
+    background-color: #f0f0f0;
+}
+
+.login-form input[type="submit"] {
+    background-color: #091242;
+    color: white;
+    border-radius: 4px;
+    padding: 15px 40px;
+}
+
+.header-image {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* CSS for dropdowns */
+.dropdowns-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dropdown {
+    width: 48%;
+    padding: 15px 0;
+    font-size: 18px;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 2px solid blueviolet;
+    border-radius: 0;
+    background-color: transparent;
+    color: black;
+}
+
+.login-form input[type="radio"] {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.login-form label {
+    color: #091242;
+}
+
+.login-form span {
+    color: #091242;
+}
+
+.icons-container {
+    display: flex;
+    .login-container {
+        background-color: #091242;
+        color: white;
+        padding: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 400px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+    }
+    
+    .login-form {
+        background-color: white;
+        border-radius: 10px;
+        padding: 40px;
+        text-align: right;
+        height: 400px;
+        width: 1200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .login-container img {
+        width: 150px;
+        height: auto;
+    }
+    
+    .login-form > div:first-child {
+        color: #091242;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    
+    .login-form input[type="text"],
+    .login-form input[type="password"],
+    .login-form input[type="submit"] {
+        font-size: 18px;
+        padding: 10px 0;
+        width: 100%;
+        margin-bottom: 20px;
+        border: none;
+        border-bottom: 2px solid blueviolet;
+        border-radius: 0;
+        background-color: transparent;
+    }
+    
+    .no-account-create {
+        display: flex;
+    }
+    
+    .no-account {
+        color: black;
+    }
+    
+    .create-account {
+        color: blue;
+    }
+    
+    .google-login-text {
+        color: black;
+    }
+    
+    .google-login {
+        display: flex;
+        align-items: center;
+    }
+    
+    .google-login-button {
+        background-color: white;
+        color: blue;
+        padding: 15px 30px;
+        border-radius: 5px;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+    
+    .google-login-button svg {
+        margin-right: 15px;
+    }
+    
+    .google-login-button:hover {
+        background-color: #f0f0f0;
+    }
+    
+    .login-form input[type="submit"] {
+        background-color: #091242;
+        color: white;
+        border-radius: 4px;
+        padding: 15px 40px;
+    }
+    
+    .header-image {
+        width: 100%;
+        height: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+    
+    /* CSS for dropdowns */
+    .dropdowns-container {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .dropdown {
+        width: 48%;
+        padding: 15px 0;
+        font-size: 18px;
+        margin-bottom: 30px;
+        border: none;
+        border-bottom: 2px solid blueviolet;
+        border-radius: 0;
+        background-color: transparent;
+        color: black;
+    }
+    
+    .login-form input[type="radio"] {
+        display: inline-block;
+        margin-right: 5px;
+    }
+    
+    .login-form label {
+        color: #091242;
+    }
+    
+    .login-form span {
+        color: #091242;
+    }
+    
+    .icons-container {
+        display: flex;
+    }
+    
+    .icon-wrapper {
+        background-color: #ccc;
+        padding: 5px;
+        margin-right: 10px;
+        
+    }
+    
+    .drag-drop-icon {
+        height: auto;
+    }
+    
+}
+
+.icon-wrapper {
+    background-color: #ccc;
+    padding: 5px;
+    margin-right: 10px;
+}
+
+.drag-drop-icon {
+    width: 5px; /* Adjust this value to make the icons smaller */
+    height: auto;
+}
+.error {
+    color: red; /* Setting the color of error messages to red */
+  }

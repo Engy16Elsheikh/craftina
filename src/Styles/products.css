@@ -1,0 +1,95 @@
+.login-form {
+    background-color: white;
+    border-radius: 10px;
+    padding: 40px;
+    text-align: right;
+    height: 500px; /* Increased height */
+    width: 1000px; /* Decreased width */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons-container {
+    display: flex;
+    margin-top: 20px; /* Add margin to separate from other elements */
+}
+
+.buttons-container input[type="submit"] {
+    margin-right: 10px; /* Adjust margin as needed */
+    background-color: #091242;
+    color: white;
+    border-radius: 4px;
+    padding: 10px 40px; /* Decreased padding for the buttons */
+    cursor: pointer;
+    border: none;
+}
+
+.buttons-container input[value="تعديل"] {
+    background-color: orange; /* Change background color to orange for "تعديل" button */
+}
+
+.buttons-container input[type="submit"]:hover {
+    background-color: #071031; /* Adjust hover background color */
+}
+
+.header-image {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* CSS for dropdowns */
+.dropdowns-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dropdown {
+    width: 48%;
+    padding: 15px 0;
+    font-size: 18px;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 2px solid blueviolet;
+    border-radius: 0;
+    background-color: transparent;
+    color: black;
+}
+
+.login-form input[type="radio"] {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.login-form label {
+    color: #091242;
+}
+
+.login-form span {
+    color: #091242;
+}
+
+.icons-container {
+    display: flex;
+}
+
+.icon-wrapper {
+    background-color: #ccc;
+    padding: 5px;
+    margin-right: 10px;
+}
+
+.drag-drop-icon {
+    width: 1px; /* Adjust this value to make the icons smaller */
+    height: auto;
+}
+.icon-wrapper img {
+    width: 40px; /* Adjust the width of the icons */
+    height: auto; /* Maintain aspect ratio */
+}
+
