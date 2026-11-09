@@ -9,7 +9,7 @@ import logo from "../assets/logo.png";
 import header from "../assets/Header2.jpeg";
 import { axiosInstance } from "../api/config";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loadUserDataFromLocalStorage } from "./loadUserDataFromLocalStorageAction";
 import { saveUserData, saveUserToken } from "../stores/slice/user";
 
@@ -26,7 +26,7 @@ const ConfirmEmail = () => {
   useEffect(() => {
     dispatch(loadUserDataFromLocalStorage());
     if (!email) navigate("/user-login");
-  }, [email]);
+  }, [email, dispatch, navigate]);
 
   useEffect(() => {
     if (feedback[0]) {
@@ -42,7 +42,8 @@ const ConfirmEmail = () => {
         window.location.reload();
       }, 6000);
     }
-  }, [feedback]);
+  }, [feedback, navigate]);
+
   const handleSubmit = async () => {
     try {
       if (code.length !== 5) {
@@ -308,6 +309,7 @@ const ConfirmEmail = () => {
               >
                 <img
                   src={logo}
+                  alt="شعار الموقع"
                   style={{ width: "50%", height: "50%", padding: "3vw" }}
                 ></img>
               </Box>

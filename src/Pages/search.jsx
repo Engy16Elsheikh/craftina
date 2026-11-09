@@ -1,22 +1,6 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Container,
-  Grid,
-  Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  Button,
-  PaginationItem,
-  MenuItem,
-} from "@mui/material";
-import SideBare from "../Components/Product/SideBare";
+import React, { useEffect } from "react";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import ProductCard from "../Components/Product/ProductCard";
-import { getProductList } from "../api/Products";
-import { getMainCatogryProducts, getSubProducts } from "../api/categories";
-import Pagination from "@mui/material/Pagination";
-import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import UsersCard from "../Components/users/usersCard";
 
@@ -30,14 +14,9 @@ const imgStyle = {
 };
 
 const SearchPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 8;
   const products = useSelector((state) => state.productServices.searchProducts);
   const services = useSelector((state) => state.productServices.searchServices);
   const users = useSelector((state) => state.productServices.searchUsers);
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
-  };
 
   useEffect(() => {
     console.log(products);

@@ -1,14 +1,15 @@
 import { Box, TextField, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
 import CommentCard from "./commentCard";
 import { axiosInstance } from "../../api/config";
+
 const labels = {
   0.5: "غير مفيد",
   1: "غير مفيد+",
-  1.5: "ضغيف",
+  1.5: "ضعيف",
   2: "ضعيف + ",
   2.5: "جيد ",
   3: "جيد +",
@@ -23,36 +24,39 @@ function getLabelText(value) {
 }
 
 const Comments = ({ data }) => {
-  const [value, setValue] = React.useState(2);
-  const [hover, setHover] = React.useState(-1);
+  const productId = data?._id;
+  const [value, setValue] = useState(2);
+  const [hover, setHover] = useState(-1);
   const token = localStorage.getItem("token");
   const [comment, setComment] = useState({
     comment: "",
     rating: 0,
   });
   const [comments, setComments] = useState([]);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setComment({
-      ...comment,
+    setComment((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
+  const fetchProductComments = useCallback(async () => {
+    if (!productId) return;
+    try {
+      const response = await axiosInstance.get(
+        `/products/${productId}/feedback`
+      );
+      setComments(response.data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  }, [productId]);
+
   useEffect(() => {
-    const fetchProductComments = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `/products/${data._id}/feedback`
-        );
-        setComments(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-      }
-    };
     fetchProductComments();
-  }, []);
+  }, [fetchProductComments]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -60,23 +64,23 @@ const Comments = ({ data }) => {
     try {
       const commentData = {
         comment: comment.comment,
-        // rating: value,
-        rating: 0,
+        rating: value,
       };
 
-      await axiosInstance.post(`/products/${data._id}/feedback`, commentData, {
+      await axiosInstance.post(`/products/${productId}/feedback`, commentData, {
         headers: {
           token,
         },
       });
-      console.log("success");
+
       setComment({
         comment: "",
         rating: 0,
       });
-      window.location.reload();
+      // Re-fetch the list instead of reloading the whole page
+      await fetchProductComments();
     } catch (error) {
-      console.error("Error submitting order:", error);
+      console.error("Error submitting comment:", error);
     }
   };
 
@@ -106,9 +110,9 @@ const Comments = ({ data }) => {
                   y2="87705.8"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop stop-color="#FFB629" />
-                  <stop offset="0.507189" stop-color="#FFDA56" />
-                  <stop offset="1" stop-color="#FFD7A6" />
+                  <stop stopColor="#FFB629" />
+                  <stop offset="0.507189" stopColor="#FFDA56" />
+                  <stop offset="1" stopColor="#FFD7A6" />
                 </linearGradient>
               </defs>
             </svg>
@@ -118,10 +122,9 @@ const Comments = ({ data }) => {
           </Typography>
         </Box>
         {comments &&
-          comments.map((commentdata, index) => {
-            // You need to return the CommentCard component here
-            return <CommentCard key={index} data={commentdata} />;
-          })}
+          comments.map((commentdata, index) => (
+            <CommentCard key={commentdata._id || index} data={commentdata} />
+          ))}
 
         <Box
           mt={5}
@@ -206,7 +209,6 @@ const Comments = ({ data }) => {
             <Box mt={5}>
               <Typography variant="p"> أضف تعليق</Typography>
               <Box mt={3} sx={{ width: "65%" }}>
-                {/* sx={{ color: "#667085" }} */}
                 <TextField
                   id="comment"
                   name="comment"
@@ -254,5 +256,4 @@ const Comments = ({ data }) => {
     </Box>
   );
 };
-
 export default Comments;

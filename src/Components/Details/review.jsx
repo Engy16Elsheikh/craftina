@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
@@ -6,7 +6,7 @@ import Comments from "./comments";
 const labels = {
   0.5: "غير مفيد",
   1: "غير مفيد+",
-  1.5: "ضغيف",
+  1.5: "ضعيف",
   2: "ضعيف + ",
   2.5: "جيد ",
   3: "جيد +",
@@ -26,7 +26,7 @@ export const Review = ({ data }) => {
     <>
       <Box
         sx={{
-          marginTop: { xs: "120vh", md: "100vh", },
+          marginTop: { xs: "120vh", md: "100vh" },
           direction: " rtl",
           width: "86%",
           padding: "5%",

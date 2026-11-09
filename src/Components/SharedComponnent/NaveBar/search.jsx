@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { axiosInstance } from "../../../api/config";
 import { useDispatch } from "react-redux";
 import {
@@ -15,39 +15,33 @@ import IconButton from "@mui/material/IconButton";
 const SearchInput = () => {
   const [query, setQuery] = useState("");
   const token = localStorage.getItem("token");
-  const [products, setProducts] = useState([]);
-  const [services, setServices] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   console.log(products);
-  //   console.log(services);
-  // }, [products, services]);
-
   const handleSearch = () => {
     axiosInstance
-      .get(`/search?q=${query}`, {
+      .get("/search", {
+        // axios encodes the query string for us
+        params: { q: query },
         headers: {
           token,
         },
       })
       .then((response) => {
-        setProducts(response.data.products);
-        setServices(response.data.services);
         dispatch(setSearchProducts(response.data.products));
         dispatch(setSearchServices(response.data.services));
         dispatch(setSearchUsers(response.data.users));
-        console.log(response.data);
         navigate("/search");
       })
       .catch((error) => {
         console.error("Error fetching search results:", error);
       });
   };
+
   const handleInputChange = (event) => {
     setQuery(event.target.value);
   };
+
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
       <TextField

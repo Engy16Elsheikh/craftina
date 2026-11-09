@@ -1,11 +1,10 @@
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
-import { imgStyle, positionBox, mainBox } from "../../Styles/detailsPageStyle";
+import { imgStyle, mainBox } from "../../Styles/detailsPageStyle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import IconButton from "@mui/material/IconButton";
 import EngineeringIcon from "@mui/icons-material/Engineering";
-import PersonIcon from "@mui/icons-material/Person";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import "swiper/css";
@@ -17,25 +16,21 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToFavirot, removeFavirot } from "../../stores/slice/favirot";
 
+const pageName = "services";
+
 const ServicedetailCard = ({ data }) => {
-  const [centerIndex, setCenterIndex] = useState(0);
   const [openModal, setOpenModal] = useState(false);
-  const [pageName, setPageName] = useState("services");
   const swiperRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isFavorite, setIsFavorite] = useState(false);
-  const refIcon = useRef();
   const favirot = useSelector((state) => state.favirot.favirot);
+
+  // Derived straight from the store, so no extra state or effect is needed
+  const isFavorite = favirot.some((product) => product.id === data.id);
 
   const HandleViewVendor = () => {
     navigate(`/userViewVendor/${data.vendor.id}`);
   };
-  const isProductInFavirot = favirot.some((product) => product.id === data.id);
-
-  useState(() => {
-    setIsFavorite(isProductInFavirot);
-  }, [isProductInFavirot]);
 
   const toggleFavorite = () => {
     if (isFavorite) {
@@ -43,8 +38,8 @@ const ServicedetailCard = ({ data }) => {
     } else {
       dispatch(addToFavirot(data));
     }
-    setIsFavorite(!isFavorite);
   };
+
   const toggleModal = () => {
     setOpenModal(!openModal);
   };
@@ -59,10 +54,6 @@ const ServicedetailCard = ({ data }) => {
     if (swiperRef.current && swiperRef.current.swiper) {
       swiperRef.current.swiper.slidePrev();
     }
-  };
-
-  const handleSlideChange = (swiper) => {
-    setCenterIndex(swiper.realIndex + 1);
   };
 
   return (
@@ -108,9 +99,9 @@ const ServicedetailCard = ({ data }) => {
                     y2="87705.8"
                     gradientUnits="userSpaceOnUse"
                   >
-                    <stop stop-color="#FFB629" />
-                    <stop offset="0.507189" stop-color="#FFDA56" />
-                    <stop offset="1" stop-color="#FFD7A6" />
+                    <stop stopColor="#FFB629" />
+                    <stop offset="0.507189" stopColor="#FFDA56" />
+                    <stop offset="1" stopColor="#FFD7A6" />
                   </linearGradient>
                 </defs>
               </svg>
@@ -129,8 +120,6 @@ const ServicedetailCard = ({ data }) => {
               lg={6}
               sx={{
                 position: "relative",
-
-                // marginRight:"2%"
               }}
             >
               <Box mb={5}>
@@ -139,7 +128,6 @@ const ServicedetailCard = ({ data }) => {
                   modules={[Navigation, Pagination, Scrollbar, A11y]}
                   slidesPerView={1}
                   loop={true}
-                  onSlideChange={handleSlideChange}
                   navigation={{
                     nextEl: ".swiper-button-next",
                     prevEl: ".swiper-button-prev",
@@ -202,14 +190,12 @@ const ServicedetailCard = ({ data }) => {
             </Grid>
 
             <Grid xs={12} md={6}>
-            <Grid xs={12} md={6}>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Box sx={{ display: "flex" }}>
                   <Box ml={5}>
                     {data.vendor.photo ? (
                       <IconButton onClick={HandleViewVendor}>
                         <img
-                        
                           height="35"
                           width="35"
                           src={data.vendor.photo}
@@ -223,6 +209,7 @@ const ServicedetailCard = ({ data }) => {
                           height="35"
                           width="35"
                           src="https://th.bing.com/th/id/OIP.e4YIHGIZBy1X7GW01zOQfwHaHa?rs=1&pid=ImgDetMain"
+                          alt="Person"
                         />
                       </IconButton>
                     )}
@@ -248,7 +235,7 @@ const ServicedetailCard = ({ data }) => {
                   width: "60%",
                   display: "flex",
                   justifyContent: "space-between",
-                  color: "#999999;",
+                  color: "#999999",
                 }}
               >
                 <Typography variant="p"> {data.category.main}</Typography>
@@ -266,7 +253,6 @@ const ServicedetailCard = ({ data }) => {
               </Typography>
             </Grid>
           </Grid>
-          </Grid>
 
           <Box mt={3} sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Box mt={4}></Box>
@@ -283,7 +269,6 @@ const ServicedetailCard = ({ data }) => {
                 marginTop: "2vh",
                 position: "relative",
                 fontFamily: " 'Rubik', sans-serif",
-                // padding: "5%",
                 width: "200px",
               }}
               onClick={toggleModal}

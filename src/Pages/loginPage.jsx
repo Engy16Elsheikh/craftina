@@ -5,7 +5,6 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { MenuItem } from "@mui/material";
 import logo from "../assets/logo.png";
 import header from "../assets/Header2.jpeg";
 import { axiosInstance } from "../api/config";
@@ -24,7 +23,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     dispatch(loadUserDataFromLocalStorage());
-  }, []);
+  }, [dispatch]);
 
   const checkHistory = () => {
     if (
@@ -331,6 +330,7 @@ const LoginPage = () => {
                 >
                   <img
                     src={logo}
+                    alt="شعار الموقع"
                     style={{ width: "50%", height: "50%", padding: "3vw" }}
                   ></img>
                 </Box>

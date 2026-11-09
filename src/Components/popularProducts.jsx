@@ -3,7 +3,6 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useEffect, useRef, useState } from "react";
 import ProductCard from "./Product/ProductCard";
-import { SettingsPhone } from "@mui/icons-material";
 import { getPopularProduct } from "../api/Products";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import IconButton from "@mui/material/IconButton";
@@ -16,14 +15,12 @@ import "swiper/css/scrollbar";
 const PopularProducts = () => {
   const [mostPopular, setMostPopular] = useState([]);
   const swiperRef = useRef(null);
-  const [centerIndex, setCenterIndex] = useState(0);
 
   useEffect(() => {
     const fetchProductList = async () => {
       try {
         const response = await getPopularProduct();
         setMostPopular(response);
-        console.log(response)
       } catch (error) {
         console.error("Error fetching product list:", error);
       }
@@ -41,10 +38,6 @@ const PopularProducts = () => {
     if (swiperRef.current && swiperRef.current.swiper) {
       swiperRef.current.swiper.slidePrev();
     }
-  };
-
-  const handleSlideChange = (swiper) => {
-    setCenterIndex(swiper.realIndex + 1);
   };
 
   const serviceBox = {
@@ -79,9 +72,9 @@ const PopularProducts = () => {
                   y2="87705.8"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop stop-color="#FFB629" />
-                  <stop offset="0.507189" stop-color="#FFDA56" />
-                  <stop offset="1" stop-color="#FFD7A6" />
+                  <stop stopColor="#FFB629" />
+                  <stop offset="0.507189" stopColor="#FFDA56" />
+                  <stop offset="1" stopColor="#FFD7A6" />
                 </linearGradient>
               </defs>
             </svg>
@@ -96,7 +89,6 @@ const PopularProducts = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            // marginRight: "4vw",
           }}
         >
           <Swiper
@@ -106,7 +98,6 @@ const PopularProducts = () => {
             ref={swiperRef}
             modules={[Navigation, Pagination, Scrollbar, A11y]}
             loop={true}
-            onSlideChange={handleSlideChange}
             breakpoints={{
               0: {
                 slidesPerView: 1,
@@ -119,10 +110,12 @@ const PopularProducts = () => {
               },
             }}
           >
-            <Grid container spacing={5}  mt={10} >
+            <Grid container spacing={5} mt={10}>
               {mostPopular.map((product) => (
-                <Grid key={product.id} item >
-                  <SwiperSlide style={{display:"flex",justifyContent:"center"}}>
+                <Grid key={product.id || product._id} item>
+                  <SwiperSlide
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
                     <ProductCard data={product} />
                   </SwiperSlide>
                 </Grid>
@@ -132,7 +125,6 @@ const PopularProducts = () => {
           <IconButton
             sx={{
               position: "absolute",
-              // top: "30%",
               left: "5%",
               transform: "translateY(-50%)",
               zIndex: 999,
@@ -149,7 +141,6 @@ const PopularProducts = () => {
           <IconButton
             sx={{
               position: "absolute",
-              // top: "30%",
               right: "5%",
               transform: "translateY(-50%)",
               zIndex: 999,

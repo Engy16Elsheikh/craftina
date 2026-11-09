@@ -1,11 +1,11 @@
 import { Box, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { imgStyle, positionBox, mainBox } from '../../Styles/detailsPageStyle'
+import { imgStyle} from '../../Styles/detailsPageStyle'
 import YellowButtom from '../../Components/SharedComponnent/YellowButtom'
 
 
 const NotFound = () => {
-    const [buttomData,setData]=useState("العودة للرئيسية")
+    const [buttomData]=useState("العودة للرئيسية")
     return (
         <Box sx={{position:"relative"}} >
             <Box sx={imgStyle} >

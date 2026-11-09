@@ -12,7 +12,6 @@ import VendorProductCard from "../../Components/Vendor/vendorProductCard";
 const VendorProducts = () => {
   const [products, setProducts] = useState([]);
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const token = localStorage.getItem("token");
   const userId = userData ? userData._id : null;
 
   useEffect(() => {

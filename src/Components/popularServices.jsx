@@ -1,5 +1,4 @@
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import IconButton from "@mui/material/IconButton";
@@ -9,22 +8,18 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import React, { useEffect, useRef, useState } from "react";
-import { getPopularProduct, getProductList } from "../api/Products";
 import ProductCard from "./Product/ProductCard";
 import { getPopularServices } from "../api/services";
 
 const PopularServices = React.forwardRef((props, ref) => {
   const [services, setServices] = useState([]);
   const swiperRef = useRef(null);
-  const [centerIndex, setCenterIndex] = useState(0);
 
   useEffect(() => {
     const fetchServicsList = async () => {
       try {
         const response = await getPopularServices();
         setServices(response);
-        console.log(response)
-
       } catch (error) {
         console.error("Error fetching product list:", error);
       }
@@ -42,10 +37,6 @@ const PopularServices = React.forwardRef((props, ref) => {
     if (swiperRef.current && swiperRef.current.swiper) {
       swiperRef.current.swiper.slidePrev();
     }
-  };
-
-  const handleSlideChange = (swiper) => {
-    setCenterIndex(swiper.realIndex + 1);
   };
 
   const imgStyle = {
@@ -103,9 +94,9 @@ const PopularServices = React.forwardRef((props, ref) => {
                     y2="87705.8"
                     gradientUnits="userSpaceOnUse"
                   >
-                    <stop stop-color="#FFB629" />
-                    <stop offset="0.507189" stop-color="#FFDA56" />
-                    <stop offset="1" stop-color="#FFD7A6" />
+                    <stop stopColor="#FFB629" />
+                    <stop offset="0.507189" stopColor="#FFDA56" />
+                    <stop offset="1" stopColor="#FFD7A6" />
                   </linearGradient>
                 </defs>
               </svg>
@@ -124,34 +115,31 @@ const PopularServices = React.forwardRef((props, ref) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              // marginRight: "4vw",
             }}
           >
             <Swiper
-  ref={swiperRef}
-  modules={[Navigation, Pagination, Scrollbar, A11y]}
-  breakpoints={{
-    0: { slidesPerView: 1 },
-    600: { slidesPerView: 2 },
-    960: { slidesPerView: 4 },
-  }}
-  spaceBetween={20}
-  loop={services.length > 1}
-  onSlideChange={handleSlideChange}
->
-  {services.map((service) => (
-    <SwiperSlide
-      key={service._id}
-      style={{ display: "flex", justifyContent: "center" }}
-    >
-      <ProductCard data={service} />
-    </SwiperSlide>
-  ))}
-</Swiper>
+              ref={swiperRef}
+              modules={[Navigation, Pagination, Scrollbar, A11y]}
+              breakpoints={{
+                0: { slidesPerView: 1 },
+                600: { slidesPerView: 2 },
+                960: { slidesPerView: 4 },
+              }}
+              spaceBetween={20}
+              loop={services.length > 1}
+            >
+              {services.map((service) => (
+                <SwiperSlide
+                  key={service._id}
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
+                  <ProductCard data={service} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
             <IconButton
               sx={{
                 position: "absolute",
-                // top: "20%",
                 left: "5%",
                 transform: "translateY(-50%)",
                 zIndex: 999,
@@ -168,7 +156,6 @@ const PopularServices = React.forwardRef((props, ref) => {
             <IconButton
               sx={{
                 position: "absolute",
-                // top: "30%",
                 right: "1%",
                 transform: "translateY(-50%)",
                 zIndex: 999,

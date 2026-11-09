@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import ServiceCard from "./serviceCard";
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 import { Container } from "@mui/material";
 
 

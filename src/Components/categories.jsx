@@ -5,35 +5,21 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Card, CardMedia, Box, Typography, Grid } from "@mui/material";
 
-import { useEffect } from "react";
-import {
-  getProductCategories,
-  getServicesCategories,
-} from "../api/categoriesApi";
+import { getServicesCategories } from "../api/categoriesApi";
 
 const Categories = React.forwardRef((props, ref) => {
-  const [productCategories, setProductCategories] = useState([]);
   const [serviceCategories, setServiceCategories] = useState([]);
-  const [centerIndex, setCenterIndex] = useState(0);
   const swiperRef = useRef(null);
-
-  useEffect(() => {
-    getProductCategories()
-      .then((res) => {
-        setProductCategories(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   useEffect(() => {
     getServicesCategories()
       .then((res) => {
         setServiceCategories(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, []);
 
   const goNext = () => {
@@ -48,9 +34,6 @@ const Categories = React.forwardRef((props, ref) => {
     }
   };
 
-  const handleSlideChange = (swiper) => {
-    setCenterIndex(swiper.realIndex + 1);
-  };
   return (
     <Box
       ref={ref}
@@ -105,7 +88,6 @@ const Categories = React.forwardRef((props, ref) => {
           ref={swiperRef}
           modules={[Navigation, Pagination, Scrollbar, A11y]}
           loop={true}
-          onSlideChange={handleSlideChange}
           breakpoints={{
             0: {
               slidesPerView: 2,
@@ -121,7 +103,7 @@ const Categories = React.forwardRef((props, ref) => {
           {/* Swiper slides go here */}
           <Grid container>
             {serviceCategories.map((Categorie) => (
-              <SwiperSlide>
+              <SwiperSlide key={Categorie._id || Categorie.name}>
                 <Grid item>
                   <Card
                     sx={{
@@ -153,6 +135,7 @@ const Categories = React.forwardRef((props, ref) => {
                       height="100%"
                       width="100%"
                       image={Categorie.photo}
+                      alt={Categorie.name}
                     />
                   </Card>
                 </Grid>

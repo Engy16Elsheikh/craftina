@@ -4,12 +4,8 @@ import {
   Container,
   Grid,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
   Button,
   PaginationItem,
-  MenuItem,
   Modal
 } from "@mui/material";
 import SideBare from "../Components/Product/SideBare";

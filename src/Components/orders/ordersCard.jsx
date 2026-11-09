@@ -1,20 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const OrdersCard = ({ data }) => {
-  //   const [isFavorite, setIsFavorite] = useState(false);
-
-  //   const toggleFavorite = () => {
-  //     setIsFavorite(!isFavorite);
-  //   };
-
   return (
     <Box sx={{ direction: "rtl" }} width={200}>
       <Card mb={10}>
@@ -38,15 +30,6 @@ const OrdersCard = ({ data }) => {
                   justifyContent: "space-around",
                 }}
               >
-                {/* <Box sx={{ borderRadius: "50%" }}>
-                  <img
-                    height="35"
-                    width="35"
-                    src="https://www.figma.com/file/KoAR42FTHSt4h6oCQSSZOL/image/b0b5575b38d94edf1272fe60bcdd977fef76cd81"
-                    alt="Person"
-                    style={{ borderRadius: "50%" }}
-                  />
-                </Box> */}
                 <Typography
                   gutterBottom
                   variant="p"
@@ -55,13 +38,6 @@ const OrdersCard = ({ data }) => {
                 >
                   {data.product.name}
                 </Typography>
-                {/* <Box onClick={toggleFavorite}>
-                  {isFavorite ? (
-                    <FavoriteIcon sx={{ color: "red", fontSize: "1.5rem" }} />
-                  ) : (
-                    <FavoriteBorderIcon sx={{ fontSize: "1.5rem" }} />
-                  )}
-                </Box> */}
               </Box>
               <Box
                 mt={2}
@@ -94,7 +70,7 @@ const OrdersCard = ({ data }) => {
                 mt={2}
                 sx={{
                   display: "flex",
-                  justifyContent: "space-around", // Changed to space-between for spacing
+                  justifyContent: "space-around",
                 }}
               >
                 <Typography
@@ -126,7 +102,7 @@ const OrdersCard = ({ data }) => {
                   ? data.service.photos[0]
                   : ""
               }
-              alt="Product Image"
+              alt="Service Image"
             />
             <CardContent>
               <Box
@@ -135,15 +111,6 @@ const OrdersCard = ({ data }) => {
                   justifyContent: "space-around",
                 }}
               >
-                {/* <Box sx={{ borderRadius: "50%" }}>
-                  <img
-                    height="35"
-                    width="35"
-                    src="https://www.figma.com/file/KoAR42FTHSt4h6oCQSSZOL/image/b0b5575b38d94edf1272fe60bcdd977fef76cd81"
-                    alt="Person"
-                    style={{ borderRadius: "50%" }}
-                  />
-                </Box> */}
                 <Typography
                   gutterBottom
                   variant="p"
@@ -152,13 +119,6 @@ const OrdersCard = ({ data }) => {
                 >
                   {data.service.name}
                 </Typography>
-                {/* <Box onClick={toggleFavorite}>
-                  {isFavorite ? (
-                    <FavoriteIcon sx={{ color: "red", fontSize: "1.5rem" }} />
-                  ) : (
-                    <FavoriteBorderIcon sx={{ fontSize: "1.5rem" }} />
-                  )}
-                </Box> */}
               </Box>
               <Box
                 mt={2}
@@ -191,7 +151,7 @@ const OrdersCard = ({ data }) => {
                 mt={2}
                 sx={{
                   display: "flex",
-                  justifyContent: "space-around", // Changed to space-between for spacing
+                  justifyContent: "space-around",
                 }}
               >
                 <Typography

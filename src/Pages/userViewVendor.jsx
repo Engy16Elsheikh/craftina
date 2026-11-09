@@ -4,7 +4,6 @@ import Footer from "../Components/footer";
 import Typography from "@mui/material/Typography";
 import PersonIcon from "@mui/icons-material/Person";
 import IconButton from "@mui/material/IconButton";
-import ServiceCard from "../Components/serviceCard";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -20,7 +19,7 @@ import { getServicesByUser } from "../api/services";
 import ProductCard from "./../Components/Product/ProductCard";
 
 const UserViewVendor = () => {
-  const [centerIndex, setCenterIndex] = useState(0);
+  const [, setCenterIndex] = useState(0);
   const [vendor, setVendor] = useState({});
   const token = localStorage.getItem("token");
   const [products, setProducts] = useState([]);

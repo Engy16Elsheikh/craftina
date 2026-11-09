@@ -2,14 +2,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Footer from "./../Components/footer";
-import ServiceCard from "../Components/serviceCard";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import React, { useRef, useState } from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import Card from "@mui/material/Card";
@@ -21,14 +18,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 const FavouritePage = () => {
-  const [centerIndex, setCenterIndex] = useState(0);
-  const swiperRef = useRef(null);
   const navigate = useNavigate();
   const fave = useSelector((state) => state.favirot.favirot);
-
-  const handleSlideChange = (swiper) => {
-    setCenterIndex(swiper.realIndex + 1);
-  };
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -142,6 +133,7 @@ const FavouritePage = () => {
                                     height="35"
                                     width="35"
                                     src="https://th.bing.com/th/id/OIP.e4YIHGIZBy1X7GW01zOQfwHaHa?rs=1&pid=ImgDetMain"
+                                    alt="Person"
                                   />
                                 </IconButton>
                               )}

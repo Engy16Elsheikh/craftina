@@ -3,19 +3,11 @@ import Categories from "../Components/categories";
 import HomeHeader from "../Components/Home/homeHeader";
 import OrderServiceSteps from "../Components/orderServiceSteps";
 import Footer from "../Components/footer";
-import Navbar from "../Components/navBar";
 import PopularServices from "../Components/popularServices";
 import PopularProducts from "../Components/popularProducts";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useRef } from "react";
-import { loadUserDataFromLocalStorage } from "./loadUserDataFromLocalStorageAction";
-import { clearUserData, clearUserToken } from "../stores/slice/user";
+import { useRef } from "react";
 
 const HomePage = () => {
-  const dispatch = useDispatch();
-  const userData = useSelector((state) => state.user.userData);
-  const token = useSelector((state) => state.user.token);
-
   // useEffect(() => {
   //   dispatch(loadUserDataFromLocalStorage());
   //   console.log("User Data:", userData);

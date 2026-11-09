@@ -41,9 +41,9 @@ const OrderServiceSteps = ({ onButtonClick }) => {
               y2="6.97822"
               gradientUnits="userSpaceOnUse"
             >
-              <stop stop-color="#FFB629" />
-              <stop offset="0.507189" stop-color="#FFDA56" />
-              <stop offset="1" stop-color="#FFD7A6" />
+              <stop stopColor="#FFB629" />
+              <stop offset="0.507189" stopColor="#FFDA56" />
+              <stop offset="1" stopColor="#FFD7A6" />
             </linearGradient>
           </defs>
         </svg>
@@ -60,7 +60,7 @@ const OrderServiceSteps = ({ onButtonClick }) => {
         }}
       >
         <Grid container sx={{ marginLeft: "10%" }}>
-          <Grid item xs={6} lg={1.5} sx={{ mb: { xs: "4px", xs: "0px" } }}>
+          <Grid item xs={6} lg={1.5} sx={{ mb: { xs: "0px" } }}>
             <Box
               sx={{
                 background: "linear-gradient(90deg, #091242 0%, #1F2A69 100%)",
@@ -115,7 +115,7 @@ const OrderServiceSteps = ({ onButtonClick }) => {
               />
             </svg>
           </Grid>
-          <Grid item xs={6} lg={1.5} sx={{ mb: { xs: "4px", xs: "0px" } }}>
+          <Grid item xs={6} lg={1.5} sx={{ mb: { xs: "0px" } }}>
             <Box
               sx={{
                 background: "linear-gradient(90deg, #091242 0%, #1F2A69 100%)",
@@ -151,7 +151,6 @@ const OrderServiceSteps = ({ onButtonClick }) => {
               اضغط علي زر تواصل مع البائع
             </Typography>
           </Grid>
-          {/*            */}
           <Grid
             item
             lg={1.5}

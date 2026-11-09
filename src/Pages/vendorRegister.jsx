@@ -18,6 +18,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+
 const VendorRegister = () => {
   const [governorates, setGovernorates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -33,7 +34,6 @@ const VendorRegister = () => {
   const location = useLocation();
 
   const formData = location.state?.formData || {};
-  console.log("formData from vendor register:", formData);
   const [vendorFormData, setVendorFormData] = useState({
     ...formData,
     job: "",
@@ -69,24 +69,24 @@ const VendorRegister = () => {
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "LocalCrafts");
+      const uploadData = new FormData();
+      uploadData.append("file", file);
+      uploadData.append("upload_preset", "LocalCrafts");
 
       try {
         const response = await fetch(
           "https://api.cloudinary.com/v1_1/dbtaj8rn6/image/upload",
           {
             method: "POST",
-            body: formData,
+            body: uploadData,
           }
         );
         const data = await response.json();
         setImageURL(data.secure_url);
-        setVendorFormData({
-          ...vendorFormData,
+        setVendorFormData((prevState) => ({
+          ...prevState,
           photo: data.secure_url,
-        });
+        }));
       } catch (error) {
         console.error("Error uploading image:", error);
       }
@@ -95,10 +95,10 @@ const VendorRegister = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setVendorFormData({
-      ...vendorFormData,
+    setVendorFormData((prevState) => ({
+      ...prevState,
       [name]: value,
-    });
+    }));
   };
 
   const validateForm = () => {
@@ -110,7 +110,7 @@ const VendorRegister = () => {
       setJobError("");
     }
 
-    if (!/^\d{10}$/g.test(vendorFormData.phone)) {
+    if (!/^\d{10}$/.test(vendorFormData.phone)) {
       setPhoneError("رقم الهاتف يجب أن يتكون من 10 أرقام");
       isValid = false;
     } else {
@@ -262,7 +262,6 @@ const VendorRegister = () => {
                       id="icon-button-file"
                       type="file"
                       style={{ display: "none" }}
-                      value={vendorFormData.photo}
                       onChange={handleFileChange}
                     />
                   </IconButton>
@@ -308,9 +307,11 @@ const VendorRegister = () => {
                   value={selectedGovernorate}
                   onChange={(e) => {
                     setSelectedGovernorate(e.target.value);
+                    setSelectedCity("");
+                    setCities([]);
                     setVendorFormData((prevState) => ({
                       ...prevState,
-                      address: { ...prevState.address, gov: e.target.value },
+                      address: { gov: e.target.value, city: "" },
                     }));
                   }}
                   variant="standard"
@@ -459,8 +460,9 @@ const VendorRegister = () => {
                   >
                     <img
                       src={logo}
+                      alt="Logo"
                       style={{ width: "50%", height: "50%", padding: "3vw" }}
-                    ></img>
+                    />
                   </Box>
                 </Box>
               </Box>

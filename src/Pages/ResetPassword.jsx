@@ -28,7 +28,7 @@ const ResetPassword = () => {
   useEffect(() => {
     dispatch(loadUserDataFromLocalStorage());
     if (!email) navigate("/user-login");
-  }, [email]);
+  }, [email, dispatch, navigate]);
 
   useEffect(() => {
     if (feedback[0]) {
@@ -44,7 +44,7 @@ const ResetPassword = () => {
         window.location.reload();
       }, 6000);
     }
-  }, [feedback]);
+  }, [feedback, navigate]);
 
   const validateInputs = () => {
     if (code.length !== 5 || code.match(/[^0-9]/)) {
@@ -363,6 +363,7 @@ const ResetPassword = () => {
                 >
                   <img
                     src={logo}
+                    alt="شعار الموقع"
                     style={{ width: "50%", height: "50%", padding: "3vw" }}
                   ></img>
                 </Box>

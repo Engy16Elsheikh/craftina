@@ -9,22 +9,24 @@ import { useEffect, useState } from "react";
 import { getUserData } from "../api/users";
 import { Avatar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import header2 from "../assets/Header2.jpeg"
+import header2 from "../assets/Header2.jpeg";
 
 const VendorProfile = () => {
   const userData = JSON.parse(localStorage.getItem("userData"));
   const token = localStorage.getItem("token");
+  const userId = userData._id;
   const [user, setUser] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    getUserData(userData._id, token)
+    getUserData(userId, token)
       .then((res) => {
         setUser(res.data);
         console.log(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [userId, token]);
+
   const handleEditProfile = () => {
     navigate("/vendorEditProfile");
   };
@@ -33,8 +35,7 @@ const VendorProfile = () => {
     <Box sx={{ position: "relative" }}>
       <Box
         sx={{
-          backgroundImage:
-            `url(${header2})`,
+          backgroundImage: `url(${header2})`,
           height: "35vh",
           width: "100%",
           backgroundRepeat: "no-repeat",
@@ -51,9 +52,7 @@ const VendorProfile = () => {
             right: "0",
             left: "0",
           }}
-        >
-
-        </Box>
+        ></Box>
         {/* Red Box */}
         <Box
           sx={{
@@ -95,20 +94,36 @@ const VendorProfile = () => {
               </defs>
             </svg>
             <Typography
-              sx={{ display: "block", margin: "3vh 1vw 0 0", fontSize: "2rem",fontFamily:"Rubik" }}
+              sx={{
+                display: "block",
+                margin: "3vh 1vw 0 0",
+                fontSize: "2rem",
+                fontFamily: "Rubik",
+              }}
             >
               الصفحة الشخصية
             </Typography>
           </Box>
           {/* box البيانات */}
-          <Grid mb={10}
+          <Grid
+            mb={10}
             container
             sx={{
               direction: "rtl",
               justifyContent: "center",
             }}
-            spacing={3}>
-            <Grid item md={2} xs={12} sx={{ mt: "7vh", display: { xs: "inline-block", md: "inline-block" }, justifyContent: "center" }}>
+            spacing={3}
+          >
+            <Grid
+              item
+              md={2}
+              xs={12}
+              sx={{
+                mt: "7vh",
+                display: { xs: "inline-block", md: "inline-block" },
+                justifyContent: "center",
+              }}
+            >
               {user.photo ? (
                 <Avatar
                   src={user.photo}
@@ -121,17 +136,22 @@ const VendorProfile = () => {
                 />
               ) : (
                 <IconButton>
-                  <PersonIcon sx={{ fontSize: "15vw", color: "black" , mr: { xs: "26vw", md: "0vw" },}} />
+                  <PersonIcon
+                    sx={{
+                      fontSize: "15vw",
+                      color: "black",
+                      mr: { xs: "26vw", md: "0vw" },
+                    }}
+                  />
                 </IconButton>
               )}
-              <Box sx={{ mt: { xs: "5%" }, }}>
+              <Box sx={{ mt: { xs: "5%" } }}>
                 <Typography
                   sx={{
                     textAlign: "center",
                     fontSize: "1.5rem",
                     paddingRight: "2vw",
-                    fontFamily:"Rubik"
-
+                    fontFamily: "Rubik",
                   }}
                 >
                   {user.name}
@@ -141,46 +161,19 @@ const VendorProfile = () => {
                     textAlign: "center",
                     fontSize: "1.5em",
                     paddingRight: "2vw",
-                    fontFamily:"Rubik"
-
+                    fontFamily: "Rubik",
                   }}
                 >
                   {user.job}
                 </Typography>
               </Box>
-              {/* <Button
-                sx={{
-                  background:
-                    "linear-gradient(90deg, #1F2A69  0%, #091242 100%)",
-                  border: 0,
-                  color: "White",
-                  height: 48,
-                  padding: "0 2vw",
-                  boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
-                  marginRight: "2vw",
-                  marginTop: "2vh",
-                  position: "relative",
-                  borderRadius: 0,
-                  textWrap: "nowrap",
-                  fontSize: "1.5vw",
-                }}
-              >
-                ذهاب الى الطلبات
-                <Box
-                  sx={{
-                    position: "absolute",
-                    background: "#1F2A69",
-                    width: "20%",
-                    borderRadius: "50% 0 0",
-                    bottom: "0",
-                    height: "40%",
-                    opacity: "70%",
-                    right: "0",
-                  }}
-                ></Box>
-              </Button> */}
             </Grid>
-            <Grid item md={8} xs={12} sx={{ margin: "3vw 5vw", width: "100%", }}>
+            <Grid
+              item
+              md={8}
+              xs={12}
+              sx={{ margin: "3vw 5vw", width: "100%" }}
+            >
               <Box
                 sx={{
                   backgroundColor: "#091242",
@@ -193,7 +186,7 @@ const VendorProfile = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    fontFamily:"Rubik"
+                    fontFamily: "Rubik",
                   }}
                 >
                   <svg
@@ -217,9 +210,9 @@ const VendorProfile = () => {
                         y2="6.97822"
                         gradientUnits="userSpaceOnUse"
                       >
-                        <stop stop-color="#FFB629" />
-                        <stop offset="0.507189" stop-color="#FFDA56" />
-                        <stop offset="1" stop-color="#FFD7A6" />
+                        <stop stopColor="#FFB629" />
+                        <stop offset="0.507189" stopColor="#FFDA56" />
+                        <stop offset="1" stopColor="#FFD7A6" />
                       </linearGradient>
                     </defs>
                   </svg>
@@ -230,89 +223,143 @@ const VendorProfile = () => {
                       color: "white",
                       marginTop: "1vh",
                       backgroundColor: "rgb(50,50,50,.5)",
-                      fontFamily:"Rubik"
+                      fontFamily: "Rubik",
                     }}
                   >
                     البيانات
                   </Typography>
                 </Box>
-                
-                <Grid container sx={{
-                  direction: "rtl", textAlign: "right"
 
-                  , paddingLeft: { xs: "30%", md: "3%" },
-                  paddingRight: { xs: "10%", md: "3%" },
-                  fontSize: { xs: "1rem", md: "3rem" }
-                }}>
-                  <Grid mt={3} xs={12} md={6.1} item sx={{ display: "flex", justifyContent: "space-between", color: "white" }}>
-
+                <Grid
+                  container
+                  sx={{
+                    direction: "rtl",
+                    textAlign: "right",
+                    paddingLeft: { xs: "30%", md: "3%" },
+                    paddingRight: { xs: "10%", md: "3%" },
+                    fontSize: { xs: "1rem", md: "3rem" },
+                  }}
+                >
+                  <Grid
+                    mt={3}
+                    xs={12}
+                    md={6.1}
+                    item
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      color: "white",
+                    }}
+                  >
                     <Typography>الأسم</Typography>
                     <Typography>{user.name}</Typography>
-
                   </Grid>
 
-                  <Grid mt={3} xs={12} md={6.1} item sx={{ display: "flex", justifyContent: "space-between", color: "white" }}>
-
-                    <Typography >البريد</Typography>
-                    <Typography sx={{
-                      marginRight: { xs: "3vw", md: "1vw" },
-                    }
-
-                    }>{user.email}</Typography>
-
-                  </Grid>
-                  {user.role==="vendor"&& 
-                  <>
-                  <Grid mt={3} xs={12} md={6.1} item sx={{ display: "flex", justifyContent: "space-between", color: "white" }}>
-
-                    <Typography>الهاتف</Typography>
-                    <Typography>{user.phone}</Typography>
-
-                  </Grid>
-                  <Grid mt={3} xs={12} md={6.1} item sx={{ display: "flex", justifyContent: "space-between", color: "white" }}>
-
-                    <Typography>المحافظة</Typography>
-                    <Typography> {user.address && user.address.gov}</Typography>
-
-                  </Grid>
-                  <Grid mt={3} xs={12} md={6.1} item sx={{ display: "flex", justifyContent: "space-between", color: "white" }}>
-
-                    <Typography>المدينة</Typography>
-                    <Typography>
-                      {" "}
-                      {user.address && user.address.city}
+                  <Grid
+                    mt={3}
+                    xs={12}
+                    md={6.1}
+                    item
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      color: "white",
+                    }}
+                  >
+                    <Typography>البريد</Typography>
+                    <Typography sx={{ marginRight: { xs: "3vw", md: "1vw" } }}>
+                      {user.email}
                     </Typography>
                   </Grid>
-                  <Grid mt={3} xs={12} md={6.1} item sx={{ display: "flex", justifyContent: "space-between", color: "white" }}>
+                  {user.role === "vendor" && (
+                    <>
+                      <Grid
+                        mt={3}
+                        xs={12}
+                        md={6.1}
+                        item
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          color: "white",
+                        }}
+                      >
+                        <Typography>الهاتف</Typography>
+                        <Typography>{user.phone}</Typography>
+                      </Grid>
+                      <Grid
+                        mt={3}
+                        xs={12}
+                        md={6.1}
+                        item
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          color: "white",
+                        }}
+                      >
+                        <Typography>المحافظة</Typography>
+                        <Typography>
+                          {" "}
+                          {user.address && user.address.gov}
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        mt={3}
+                        xs={12}
+                        md={6.1}
+                        item
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          color: "white",
+                        }}
+                      >
+                        <Typography>المدينة</Typography>
+                        <Typography>
+                          {" "}
+                          {user.address && user.address.city}
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        mt={3}
+                        xs={12}
+                        md={6.1}
+                        item
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          color: "white",
+                        }}
+                      >
+                        <Typography>المهنة</Typography>
+                        <Typography>{user.job}</Typography>
+                      </Grid>
 
-                    <Typography>المهنة</Typography>
-                    <Typography>
-                      {user.job}
-                    </Typography>
-                  </Grid>
-                 
-
-                  <Grid mt={3} xs={12} md={6.1} item sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginRight: { md: "10%", xs: "5%" }
-                  }}>
-                    <Typography sx={{ color: "white" }}>
-                      نبذة
-                    </Typography>
-                    <Typography
-                      sx={{
-                        wordWrap: "break-word",
-                        // width: {  sm: "auto" },
-                        marginRight: { xs: "2.5vw", md: "1vw" },
-                        color: "gray",
-                      }}
-                    >
-                      {user.description}
-                    </Typography>
-                  </Grid>
-                   </>
-                  }
+                      <Grid
+                        mt={3}
+                        xs={12}
+                        md={6.1}
+                        item
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          marginRight: { md: "10%", xs: "5%" },
+                        }}
+                      >
+                        <Typography sx={{ color: "white" }}>نبذة</Typography>
+                        <Typography
+                          sx={{
+                            wordWrap: "break-word",
+                            marginRight: { xs: "2.5vw", md: "1vw" },
+                            color: "gray",
+                          }}
+                        >
+                          {user.description}
+                        </Typography>
+                      </Grid>
+                    </>
+                  )}
                 </Grid>
               </Box>
               <Button
@@ -325,7 +372,6 @@ const VendorProfile = () => {
                   height: 48,
                   padding: "0 30px",
                   marginRight: "4vw",
-                  marginTop: ".5vw",
                   position: "relative",
                   fontWeight: "bold",
                   mt: "5vh",

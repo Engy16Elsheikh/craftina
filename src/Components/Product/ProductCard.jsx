@@ -1,10 +1,9 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useNavigate } from "react-router-dom";
@@ -13,20 +12,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToFavirot, removeFavirot } from "../../stores/slice/favirot";
 
 const ProductCard = ({ data }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const refIcon = useRef();
   const favirot = useSelector((state) => state.favirot.favirot);
+
+  const productId = data.id ? data.id : data._id;
+
+  // Derived straight from the store, so no extra state or effect is needed
+  const isFavorite = favirot.some((product) => product.id === data.id);
 
   const HandleViewVendor = () => {
     navigate(`/userViewVendor/${data.vendor.id}`);
   };
-  const isProductInFavirot = favirot.some((product) => product.id === data.id);
-
-  useState(() => {
-    setIsFavorite(isProductInFavirot);
-  }, [isProductInFavirot]);
 
   const toggleFavorite = () => {
     if (isFavorite) {
@@ -34,8 +31,8 @@ const ProductCard = ({ data }) => {
     } else {
       dispatch(addToFavirot(data));
     }
-    setIsFavorite(!isFavorite);
   };
+
   return (
     <Box sx={{ direction: "rtl" }} width={200}>
       <Card mb={10} sx={{ height: 450 }}>
@@ -69,6 +66,7 @@ const ProductCard = ({ data }) => {
                     height="35"
                     width="35"
                     src="https://th.bing.com/th/id/OIP.e4YIHGIZBy1X7GW01zOQfwHaHa?rs=1&pid=ImgDetMain"
+                    alt="Person"
                   />
                 </IconButton>
               )}
@@ -80,9 +78,7 @@ const ProductCard = ({ data }) => {
               variant="p"
               component="div"
               style={{ cursor: "pointer" }}
-              onClick={() =>
-                navigate(`/productDetails/${data.id ? data.id : data._id}`)
-              }
+              onClick={() => navigate(`/productDetails/${productId}`)}
               sx={{ fontWeight: "bold" }}
             >
               {data.name}
@@ -131,7 +127,7 @@ const ProductCard = ({ data }) => {
             variant="body2"
             mr={2}
             style={{ cursor: "pointer" }}
-            onClick={() => navigate(`/productDetails/${data.id}`)}
+            onClick={() => navigate(`/productDetails/${productId}`)}
           >
             {data.description}
           </Typography>
@@ -150,12 +146,7 @@ const ProductCard = ({ data }) => {
             >
               السعر : {data.price} ج
             </Typography>
-            <Box mt={0.5}>
-              {/* <StarBorderIcon sx={{ fontSize: "1rem" }} />
-              <StarBorderIcon sx={{ fontSize: "1rem" }} />
-              <StarBorderIcon sx={{ fontSize: "1rem" }} />
-              <StarBorderIcon sx={{ fontSize: "1rem" }} /> */}
-            </Box>
+            <Box mt={0.5}></Box>
           </Box>
         </CardContent>
       </Card>

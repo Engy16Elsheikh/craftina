@@ -1,53 +1,44 @@
-import React, { useEffect, useState } from 'react'
-import Footer from '../Components/footer'
-import { useNavigate, useParams } from 'react-router-dom'
-import { getServiceDetails } from '../api/services'
-import NaveBar from '../Components/navBar'
-import { Review } from '../Components/Details/review'
-import ServicedetailCard from '../Components/Services/ServicedetailCard'
+import React, { useEffect, useState } from "react";
+import Footer from "../Components/footer";
+import { useNavigate, useParams } from "react-router-dom";
+import { getServiceDetails } from "../api/services";
+import NaveBar from "../Components/navBar";
+import { Review } from "../Components/Details/review";
+import ServicedetailCard from "../Components/Services/ServicedetailCard";
 
-export const    ServicesDetalis = () => {
-    const [serviceDetails, setServiceDetails] = useState()
-    const navigate = useNavigate();
-    const params = useParams();
-    console.log(params);
-    
-    useEffect(() => {  
-        const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/user-login'); 
-            return; 
-        }   
-        getServiceDetails(params.serviceId)
-            .then((res) => {
-                console.log(res);
-                setServiceDetails(res.data)
-            })
-            .catch((err) => console.log(err,"error fetching"))
-            
-    }, [params.serviceId]);
-    
-    useEffect(() => {     
-        getServiceDetails(params.serviceId)
-            .then((res) => {
-                console.log(res);
-                setServiceDetails(res.data)
-            })
-            .catch((err) => console.log(err,"error fetching"))
-            
-    }, [params.serviceId]);
+export const ServicesDetalis = () => {
+  const [serviceDetails, setServiceDetails] = useState();
+  const navigate = useNavigate();
+  const { serviceId } = useParams();
 
-    
-    
-    return (
-        <>
-            <NaveBar/>
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/user-login");
+      return;
+    }
 
-            { serviceDetails && <ServicedetailCard data={serviceDetails} />}
-            <Review/>
-            <Footer />
+    let ignore = false;
 
-        </>
+    getServiceDetails(serviceId)
+      .then((res) => {
+        if (!ignore) setServiceDetails(res.data);
+      })
+      .catch((err) => console.error("Error fetching service details:", err));
 
-    )
-}
+    // Avoid setting state from an outdated request if serviceId changes
+    return () => {
+      ignore = true;
+    };
+  }, [serviceId, navigate]);
+
+  return (
+    <>
+      <NaveBar />
+
+      {serviceDetails && <ServicedetailCard data={serviceDetails} />}
+      <Review />
+      <Footer />
+    </>
+  );
+};

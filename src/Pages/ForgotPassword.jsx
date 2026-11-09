@@ -214,6 +214,7 @@ const ForgotPasswordPage = () => {
                 >
                   <img
                     src={logo}
+                    alt="شعار الموقع"
                     style={{ width: "50%", height: "50%", padding: "3vw" }}
                   ></img>
                 </Box>

@@ -1,13 +1,11 @@
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
 import PersonIcon from "@mui/icons-material/Person";
 import Button from "@mui/material/Button";
 import Footer from "./../Components/footer";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import { useEffect, useState } from "react";
 import { getCities, getGovernorates } from "../api/locations";
 import { getUserData, updateUserData } from "../api/users";
@@ -19,16 +17,15 @@ import header2 from "../assets/Header2.jpeg";
 const VendorEditProfilePage = () => {
   const userData = JSON.parse(localStorage.getItem("userData"));
   const token = localStorage.getItem("token");
-  const [imageURL, setImageURL] = useState("");
+  const userId = userData._id;
   const [user, setUser] = useState({});
   const [governorates, setGovernorates] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedGovernorate, setSelectedGovernorate] = useState();
-  const userId = JSON.parse(localStorage.getItem("userData"))._id;
   const [updatedUser, setUpdatedUser] = useState({});
-
   const [selectedCity, setSelectedCity] = useState("");
   const navigate = useNavigate();
+
   useEffect(() => {
     getGovernorates()
       .then((res) => {
@@ -48,27 +45,29 @@ const VendorEditProfilePage = () => {
         });
     }
   }, [selectedGovernorate]);
-  const validateName = (name) => {
-    return name.length >= 2 && name.length <= 50;
-  };
 
-  const validateDescription = (description) => {
-    return description.length >= 20 && description.length <= 500;
-  };
-
-  const validateJob = (job) => {
-    return job.length >= 2 && job.length <= 50;
-  };
   useEffect(() => {
-    getUserData(userData._id, token)
+    getUserData(userId, token)
       .then((res) => {
         setUser(res.data);
-
-        console.log(res.data);
         setUpdatedUser(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [userId, token]);
+
+  const validateName = (name) => {
+    const value = name || "";
+    return value.length >= 2 && value.length <= 50;
+  };
+
+  const validateDescription = (description) => {
+    const value = description || "";
+    return value.length >= 20 && value.length <= 500;
+  };
+
+  const validatePhone = (phone) => {
+    return /^\+?\d{8,15}$/.test(String(phone || "").trim());
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -88,18 +87,20 @@ const VendorEditProfilePage = () => {
       }));
     }
   };
+
   const formDataToSend = {
     ...updatedUser,
     address: {
       gov: selectedGovernorate
         ? governorates.find((gov) => gov._id === selectedGovernorate)?.name ||
           ""
-        : userData.address?.gov || "",
+        : user.address?.gov || "",
       city: selectedCity
         ? cities.find((city) => city._id === selectedCity)?.name || ""
-        : userData.address?.city || "",
+        : user.address?.city || "",
     },
   };
+
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -116,7 +117,6 @@ const VendorEditProfilePage = () => {
           }
         );
         const data = await response.json();
-        setImageURL(data.secure_url);
         setUpdatedUser((prevUser) => ({
           ...prevUser,
           photo: data.secure_url,
@@ -134,7 +134,6 @@ const VendorEditProfilePage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (user.role === "vendor") {
-      // Validate name, description, and phone number
       if (!validateName(updatedUser.name)) {
         alert("الأسم يجب أن يكون من 2 الى 50 حرف");
         return;
@@ -143,12 +142,11 @@ const VendorEditProfilePage = () => {
         alert("نبذه عنك يجب ان تكون من 20 الى 500 حرف");
         return;
       }
-      if (!validateJob(updatedUser.phone)) {
+      if (!validatePhone(updatedUser.phone)) {
         alert("الهاتف يجب ان يكون صحيح");
         return;
       }
     } else if (user.role === "customer") {
-      // Validate name only
       if (!validateName(updatedUser.name)) {
         alert("الأسم يجب أن يكون من 2 الى 50 حرف");
         return;
@@ -163,6 +161,33 @@ const VendorEditProfilePage = () => {
     } catch (error) {
       console.log("Error updating user:", error);
     }
+  };
+
+  const inputSx = {
+    width: { xs: "90%", md: "100%" },
+    height: "40px",
+    backgroundColor: "#1F2A69",
+    border: "1px solid #8E8E8E",
+    color: "white",
+    direction: "rtl",
+    mt: "2vh",
+  };
+
+  const labelSx = {
+    color: "white",
+    fontFamily: "Kurb",
+    fontSize: "1.5em",
+  };
+
+  const cornerSx = {
+    position: "absolute",
+    background: "rgb(50,50,50,.7)",
+    width: "20%",
+    borderRadius: "50% 0 0",
+    bottom: "0",
+    height: "40%",
+    opacity: "70%",
+    right: "0",
   };
 
   return (
@@ -283,9 +308,8 @@ const VendorEditProfilePage = () => {
                   )}
                 </label>
                 <EditIcon
-                  style={{
+                  sx={{
                     position: "absolute",
-
                     top: { md: "13%", xs: "4%" },
                     bottom: { xs: "40%", md: "0%" },
                     right: "10%",
@@ -315,7 +339,7 @@ const VendorEditProfilePage = () => {
                 <Box
                   sx={{
                     backgroundColor: "#091242",
-                    height: {xs:"150vh",md:"160vh"},
+                    height: { xs: "150vh", md: "160vh" },
                     borderRadius: "20px",
                   }}
                 >
@@ -347,9 +371,9 @@ const VendorEditProfilePage = () => {
                           y2="6.97822"
                           gradientUnits="userSpaceOnUse"
                         >
-                          <stop stop-color="#FFB629" />
-                          <stop offset="0.507189" stop-color="#FFDA56" />
-                          <stop offset="1" stop-color="#FFD7A6" />
+                          <stop stopColor="#FFB629" />
+                          <stop offset="0.507189" stopColor="#FFDA56" />
+                          <stop offset="1" stopColor="#FFD7A6" />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -376,97 +400,41 @@ const VendorEditProfilePage = () => {
                     spacing={10}
                   >
                     <Grid item sx={{ marginRight: "3vw" }}>
-                      <Typography
-                        sx={{
-                          color: "white",
-                          fontFamily: "Kurb",
-                          fontSize: "1.5em",
-                        }}
-                      >
-                        الأسم
-                      </Typography>
+                      <Typography sx={labelSx}>الأسم</Typography>
                       <TextField
-                        id="outlined-basic"
+                        id="profile-name"
                         variant="outlined"
                         name="name"
-                        value={updatedUser.name}
+                        value={updatedUser.name || ""}
                         onChange={handleChange}
-                        InputLabelProps={{
-                          sx: {
-                            color: "white",
-                          },
-                        }}
-                        InputProps={{
-                          sx: {
-                            width: { xs: "90%", md: "100%" },
-                            height: "40px",
-                            backgroundColor: "#1F2A69",
-                            border: "1px solid #8E8E8E",
-                            color: "white",
-                            direction: "rtl",
-                            mt: "2vh",
-                          },
-                        }}
+                        InputLabelProps={{ sx: { color: "white" } }}
+                        InputProps={{ sx: inputSx }}
                       />
-                      <Typography
-                        sx={{
-                          color: "white",
-                          fontFamily: "Kurb",
-                          fontSize: "1.5em",
-                          mt: "2vh",
-                        }}
-                      >
+                      <Typography sx={{ ...labelSx, mt: "2vh" }}>
                         البريد
                       </Typography>
                       <TextField
-                        id="outlined-basic"
+                        id="profile-email"
                         variant="outlined"
                         name="email"
                         disabled
-                        value={user.email}
+                        value={user.email || ""}
                         onChange={handleChange}
-                        InputLabelProps={{
-                          sx: {
-                            color: "white",
-                          },
-                        }}
-                        InputProps={{
-                          sx: {
-                            width: { xs: "90%", md: "100%" },
-
-                            height: "40px",
-                            backgroundColor: "#1F2A69",
-                            border: "1px solid #8E8E8E",
-                            color: "white",
-                            direction: "rtl",
-                            mt: "2vh",
-                          },
-                        }}
+                        InputLabelProps={{ sx: { color: "white" } }}
+                        InputProps={{ sx: inputSx }}
                       />{" "}
                       {user.role === "vendor" && (
                         <>
                           <Grid container>
                             <Grid item sx={{ width: "50%" }}>
-                              <Typography
-                                sx={{
-                                  color: "white",
-                                  fontFamily: "Kurb",
-                                  fontSize: "1.5em",
-                                  mt: "4vh",
-                                }}
-                              >
+                              <Typography sx={{ ...labelSx, mt: "4vh" }}>
                                 المحافظة
                               </Typography>
 
                               <TextField
-                                labelId="demo-simple-select-helper-label"
-                                id="demo-simple-select-helper"
-                                // label=" المحافظه"
+                                id="profile-governorate"
                                 name="gov"
                                 select
-                                defaultValue={
-                                  userData.address && userData.address.gov
-                                }
                                 value={selectedGovernorate || ""}
                                 onChange={(e) => {
                                   setSelectedGovernorate(e.target.value);
@@ -474,7 +442,6 @@ const VendorEditProfilePage = () => {
                                 }}
                                 sx={{
                                   width: { xs: "50%" },
-                                  // height: "40px",
                                   backgroundColor: "#1F2A69",
                                   border: "1px solid #8E8E8E",
                                   color: "white",
@@ -489,25 +456,14 @@ const VendorEditProfilePage = () => {
                               </TextField>
                             </Grid>
                             <Grid item sx={{ width: "50%" }}>
-                              <Typography
-                                sx={{
-                                  color: "white",
-                                  fontFamily: "Kurb",
-                                  fontSize: "1.5em",
-                                  mt: "4vh",
-                                }}
-                              >
+                              <Typography sx={{ ...labelSx, mt: "4vh" }}>
                                 المدينه
                               </Typography>
 
                               <TextField
-                                labelId="demo-simple-select-helper-label"
-                                id="demo-simple-select-helper"
+                                id="profile-city"
                                 name="city"
                                 select
-                                defaultValue={
-                                  userData.address && userData.address.city
-                                }
                                 value={selectedCity || ""}
                                 onChange={(e) => {
                                   setSelectedCity(e.target.value);
@@ -515,7 +471,6 @@ const VendorEditProfilePage = () => {
                                 }}
                                 sx={{
                                   width: "50%",
-                                  // height: "40px",
                                   backgroundColor: "#1F2A69",
                                   border: "1px solid #8E8E8E",
                                   color: "white",
@@ -530,89 +485,39 @@ const VendorEditProfilePage = () => {
                               </TextField>
                             </Grid>
                           </Grid>
-                          <Typography
-                            sx={{
-                              color: "white",
-                              fontFamily: "Kurb",
-                              fontSize: "1.5em",
-                              mt: "2vh",
-                            }}
-                          >
+                          <Typography sx={{ ...labelSx, mt: "2vh" }}>
                             الهاتف
                           </Typography>
                           <TextField
-                            id="outlined-basic"
+                            id="profile-phone"
                             type="number"
                             name="phone"
-                            value={updatedUser.phone}
+                            value={updatedUser.phone || ""}
                             onChange={handleChange}
                             variant="outlined"
-                            InputLabelProps={{
-                              sx: {
-                                color: "white",
-                              },
-                            }}
-                            InputProps={{
-                              sx: {
-                                width: { xs: "90%", md: "100%" },
-                                height: "40px",
-                                backgroundColor: "#1F2A69",
-                                border: "1px solid #8E8E8E",
-                                color: "white",
-                                direction: "rtl",
-                                mt: "2vh",
-                              },
-                            }}
+                            InputLabelProps={{ sx: { color: "white" } }}
+                            InputProps={{ sx: inputSx }}
                           />
-                          <Typography
-                            sx={{
-                              color: "white",
-                              fontFamily: "Kurb",
-                              fontSize: "1.5em",
-                              mt: "2vh",
-                            }}
-                          >
+                          <Typography sx={{ ...labelSx, mt: "2vh" }}>
                             المهنه
                           </Typography>
                           <TextField
-                            id="outlined-basic"
+                            id="profile-job"
                             variant="outlined"
                             name="job"
-                            value={updatedUser.job}
+                            value={updatedUser.job || ""}
                             onChange={handleChange}
-                            InputLabelProps={{
-                              sx: {
-                                color: "white",
-                              },
-                            }}
-                            InputProps={{
-                              sx: {
-                                width: { xs: "90%", md: "100%" },
-                                height: "40px",
-                                backgroundColor: "#1F2A69",
-                                border: "1px solid #8E8E8E",
-                                color: "white",
-                                direction: "rtl",
-                                mt: "2vh",
-                              },
-                            }}
+                            InputLabelProps={{ sx: { color: "white" } }}
+                            InputProps={{ sx: inputSx }}
                           />
-                          <Typography
-                            sx={{
-                              color: "white",
-                              fontFamily: "Kurb",
-                              fontSize: "1.5em",
-                              mt: "5vh",
-                            }}
-                          >
+                          <Typography sx={{ ...labelSx, mt: "5vh" }}>
                             نبذة
                           </Typography>
                           <TextField
                             name="description"
-                            value={updatedUser.description}
+                            value={updatedUser.description || ""}
                             onChange={handleChange}
-                            id="outlined-multiline-static"
-                            defaultValue="رسالة صغيرة"
+                            id="profile-description"
                             multiline
                             rows={6}
                             InputProps={{
@@ -641,7 +546,6 @@ const VendorEditProfilePage = () => {
                     >
                       <Button
                         type="submit"
-                        // onClick={handleEditProfile}
                         sx={{
                           background:
                             "linear-gradient(45deg, #FFB629 0%, #FFDA56 50%, #FFD7A6 100%)",
@@ -649,25 +553,12 @@ const VendorEditProfilePage = () => {
                           color: "black",
                           height: 48,
                           padding: "0 30px",
-                          // marginRight: "4vw",
-
                           position: "relative",
                           fontWeight: "bold",
                         }}
                       >
                         تعديل
-                        <Box
-                          sx={{
-                            position: "absolute",
-                            background: "rgb(50,50,50,.7)",
-                            width: "20%",
-                            borderRadius: "50% 0 0",
-                            bottom: "0",
-                            height: "40%",
-                            opacity: "70%",
-                            right: "0",
-                          }}
-                        ></Box>
+                        <Box sx={cornerSx}></Box>
                       </Button>
                       <Button
                         onClick={() => {
@@ -680,24 +571,12 @@ const VendorEditProfilePage = () => {
                           height: 48,
                           padding: "0 30px",
                           marginRight: "4vw",
-
                           position: "relative",
                           fontWeight: "bold",
                         }}
                       >
                         الغاء
-                        <Box
-                          sx={{
-                            position: "absolute",
-                            background: "rgb(50,50,50,.7)",
-                            width: "20%",
-                            borderRadius: "50% 0 0",
-                            bottom: "0",
-                            height: "40%",
-                            opacity: "70%",
-                            right: "0",
-                          }}
-                        ></Box>
+                        <Box sx={cornerSx}></Box>
                       </Button>
                     </Grid>
                   </Grid>

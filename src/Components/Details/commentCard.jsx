@@ -8,7 +8,7 @@ const value = 4.5;
 const CommentCard = ({data}) => {
     const createdAt = formatDistanceToNow(new Date(data.createdAt), { addSuffix: true });
     const [userData,setUserData]=useState({})
-    const token = localStorage.getItem("token");
+    //const token = localStorage.getItem("token");
     useEffect(() => {
         const token = localStorage.getItem("token");
         const fetchUserData = async () => {

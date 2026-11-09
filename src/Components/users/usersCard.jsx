@@ -1,25 +1,25 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+//import StarBorderIcon from "@mui/icons-material/StarBorder";
+//import FavoriteIcon from "@mui/icons-material/Favorite";
+//import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useNavigate } from "react-router-dom";
-import { IconButton } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { addToFavirot, removeFavirot } from "../../stores/slice/favirot";
+//import { IconButton } from "@mui/material";
+//import { useDispatch} from "react-redux";
+//import { addToFavirot, removeFavirot } from "../../stores/slice/favirot";
 
 const UsersCard = ({ data }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const refIcon = useRef();
+  //const dispatch = useDispatch();
+  //const refIcon = useRef();
 
-  const HandleViewVendor = () => {
-    navigate(`/userViewVendor/${data.vendor.id}`);
-  };
+  // const HandleViewVendor = () => {
+  //   navigate(`/userViewVendor/${data.vendor.id}`);
+  // };
 
   return (
     <Box sx={{ direction: "rtl" }} width={200}>

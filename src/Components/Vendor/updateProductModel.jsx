@@ -1,19 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import {
-  Button,
-  Container,
-  TextField,
-  MenuItem,
-  Grid,
-  Avatar,
-} from "@mui/material";
+import { Button, Container, TextField } from "@mui/material";
 import { updateProduct } from "../../api/vendor";
-import EditIcon from "@mui/icons-material/Edit";
-import { Camera } from "@mui/icons-material";
 import { getMainCatogryProducts, getSubProducts } from "../../api/categories";
+
 const UpdateProductModel = ({
   open,
   handleClose,
@@ -33,38 +25,40 @@ const UpdateProductModel = ({
   const [subCategories, setSubCategories] = useState([]);
   const [selectedMainCategory, setSelectedMainCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
-  const [imageURL, setImageURL] = useState("");
   const [errors, setErrors] = useState("");
-  const fetchMainCategories = async () => {
-    try {
-      const response = await getMainCatogryProducts();
-      setMainCategories(response.data);
-    } catch (error) {
-      console.error("Error fetching main categories:", error);
-    }
-  };
 
-  const fetchSubCategories = async (categoryId) => {
+  const fetchSubCategories = useCallback(async (categoryId) => {
     try {
       const response = await getSubProducts(categoryId);
       setSubCategories(response.data);
     } catch (error) {
       console.error("Error fetching sub categories:", error);
     }
-  };
+  }, []);
+
   useEffect(() => {
+    const fetchMainCategories = async () => {
+      try {
+        const response = await getMainCatogryProducts();
+        setMainCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching main categories:", error);
+      }
+    };
     fetchMainCategories();
   }, []);
 
+  // Also runs after handleMainCategoryChange updates category.main,
+  // so the sub categories do not need to be fetched there as well.
   useEffect(() => {
     if (editedProduct.category.main) {
       fetchSubCategories(editedProduct.category.main);
     }
-  }, [editedProduct.category.main]);
+  }, [editedProduct.category.main, fetchSubCategories]);
+
   const handleMainCategoryChange = (e) => {
     const categoryId = e.target.value;
-    setSelectedMainCategory(categoryId); // Update selectedMainCategory
-    fetchSubCategories(categoryId);
+    setSelectedMainCategory(categoryId);
     setEditedProduct((prevProduct) => ({
       ...prevProduct,
       category: {
@@ -76,7 +70,7 @@ const UpdateProductModel = ({
 
   const handleSubCategoryChange = (e) => {
     const subCategoryId = e.target.value;
-    setSelectedSubCategory(subCategoryId); // Update selectedSubCategory
+    setSelectedSubCategory(subCategoryId);
     setEditedProduct((prevProduct) => ({
       ...prevProduct,
       category: {
@@ -93,6 +87,7 @@ const UpdateProductModel = ({
       [name]: name === "price" ? parseFloat(value) || 0 : value,
     }));
   };
+
   const validateInput = (name, value) => {
     let error = "";
     switch (name) {
@@ -127,6 +122,7 @@ const UpdateProductModel = ({
     }
     setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
   };
+
   const handleFileChange1 = async (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -143,7 +139,6 @@ const UpdateProductModel = ({
           }
         );
         const data = await response.json();
-        setImageURL(data.secure_url);
         setNewPhoto(data.secure_url);
         setEditedProduct((prevProduct) => ({
           ...prevProduct,
@@ -171,7 +166,6 @@ const UpdateProductModel = ({
           }
         );
         const data = await response.json();
-        setImageURL(data.secure_url);
         setNewPhoto(data.secure_url);
         setEditedProduct((prevProduct) => ({
           ...prevProduct,
@@ -228,7 +222,6 @@ const UpdateProductModel = ({
         updatedFields,
         token
       );
-      console.log("Update Response:", response.data);
 
       // Update the editedProduct state with the updated data
       setEditedProduct(response.data);
@@ -255,9 +248,11 @@ const UpdateProductModel = ({
     direction: "rtl",
     overflow: "auto",
   };
+
   const filteredSubCategories = subCategories.filter(
     (subCategory) => subCategory.parent === selectedMainCategory
   );
+
   return (
     <Modal
       open={open}
@@ -267,59 +262,6 @@ const UpdateProductModel = ({
     >
       <Box sx={style}>
         <Container>
-          {/* <Grid
-                mt={3}
-                item
-                xs={12}
-                md={2}
-                sx={{
-                  position: "relative",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              > */}
-          {/* <label htmlFor="file-upload">
-                  {editedProduct.photos[0] ? (
-                    <Avatar
-                      key={editedProduct.photos}
-                      src={editedProduct.photos}
-                      alt="صوره المنتج"
-                      sx={{
-                        width: 150,
-                        height: 150,
-                        mr: "2vw",
-                        mt: "7vh",
-                      }}
-                    />
-                  ) : (
-                    <Camera
-                      sx={{
-                        fontSize: "15vw",
-                        color: "black",
-                        mr: "2vw",
-                        mt: "7vh",
-                      }}
-                    />
-                  )}
-                </label>
-                <EditIcon
-                  style={{
-                    position: "absolute",
-
-                    top: { md: "13%", xs: "4%" },
-                    bottom: { xs: "40%", md: "0%" },
-                    right: "10%",
-                    color: "blue",
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    borderRadius: "50%",
-                    padding: "5px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => document.getElementById("file-upload").click()}
-                />
-               
-              </Grid> */}
-
           <Typography variant="h5" sx={{ fontFamily: "Rubik" }}>
             {" "}
             تعديل المنتج{" "}
@@ -409,7 +351,6 @@ const UpdateProductModel = ({
                   ))}
                 </select>
               </Box>
-              {/* Photo input field */}
             </Box>
             <Box
               sx={{

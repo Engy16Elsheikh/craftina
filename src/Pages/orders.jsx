@@ -1,10 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
-import IconButton from "@mui/material/IconButton";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -18,12 +15,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import {
-  deleteOrder,
-  getCustomerOrders,
-  getProductById,
-  getServiceById,
-} from "../api/orders";
+import { deleteOrder, getCustomerOrders } from "../api/orders";
 import OrdersCard from "../Components/orders/ordersCard";
 import Footer from "../Components/footer";
 import header2 from "../assets/Header2.jpeg";
@@ -31,9 +23,6 @@ import header2 from "../assets/Header2.jpeg";
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [deletedOrderId, setDeletedOrderId] = useState("");
-  const swiperRef = useRef(null);
-  const [centerIndex, setCenterIndex] = useState(0);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -54,7 +43,6 @@ const Orders = () => {
     try {
       await deleteOrder(orderId, token);
       setOrders(orders.filter((order) => order._id !== orderId));
-      setDeletedOrderId(orderId);
       setDialogOpen(true);
       console.log("Order deleted successfully!");
     } catch (error) {
@@ -64,21 +52,6 @@ const Orders = () => {
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
-  };
-  const goNext = () => {
-    if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slideNext();
-    }
-  };
-
-  const goPrev = () => {
-    if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slidePrev();
-    }
-  };
-
-  const handleSlideChange = (swiper) => {
-    setCenterIndex(swiper.realIndex + 1);
   };
   return (
     <Box sx={{ position: "relative" }}>

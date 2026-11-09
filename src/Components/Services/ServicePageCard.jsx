@@ -1,8 +1,7 @@
-import React, { useRef } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
-import { useState } from "react";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -14,28 +13,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToFavirot, removeFavirot } from "../../stores/slice/favirot";
 
 const ServicePageCard = ({ data }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const refIcon = useRef();
   const favirot = useSelector((state) => state.favirot.favirot);
+
+  // Derived straight from the store, so no extra state or effect is needed
+  const isFavorite = favirot.some((product) => product.id === data.id);
 
   const HandleViewVendor = () => {
     navigate(`/userViewVendor/${data.vendor.id}`);
   };
-  const isProductInFavirot = favirot.some((product) => product.id === data.id);
-
-  useState(() => {
-    setIsFavorite(isProductInFavirot);
-  }, [isProductInFavirot]);
 
   const toggleFavorite = () => {
     if (isFavorite) {
-      dispatch(removeFavirot(data)); 
+      dispatch(removeFavirot(data));
     } else {
       dispatch(addToFavirot(data));
     }
-    setIsFavorite(!isFavorite); 
   };
 
   return (
@@ -71,6 +65,7 @@ const ServicePageCard = ({ data }) => {
                     height="35"
                     width="35"
                     src="https://th.bing.com/th/id/OIP.e4YIHGIZBy1X7GW01zOQfwHaHa?rs=1&pid=ImgDetMain"
+                    alt="Person"
                   />
                 </IconButton>
               )}
@@ -91,7 +86,9 @@ const ServicePageCard = ({ data }) => {
                   style={{ cursor: "pointer", color: "red", fontSize: "1.5rem" }}
                 />
               ) : (
-                <FavoriteBorderIcon style={{ cursor: "pointer", fontSize: "1.5rem" }} />
+                <FavoriteBorderIcon
+                  style={{ cursor: "pointer", fontSize: "1.5rem" }}
+                />
               )}
             </Box>
           </Box>
@@ -119,14 +116,14 @@ const ServicePageCard = ({ data }) => {
           </Box>
 
           <Typography mt={2} variant="body2">
-            I {data.description}{" "}
+            {data.description}
           </Typography>
 
           <Box
             mt={2}
             sx={{
               display: "flex",
-              justifyContent: "space-around", // Changed to space-between for spacing
+              justifyContent: "space-around",
             }}
           >
             <Typography

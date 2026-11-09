@@ -4,21 +4,18 @@ import Typography from "@mui/material/Typography";
 import Footer from "./../Components/footer";
 import VendorOrderCard from "../Components/vendorOrderCard";
 import { axiosInstance } from "../api/config";
-import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
-import IconButton from "@mui/material/IconButton";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import Header2 from "../assets/Header2.jpeg";
+
 const VendorOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const token = localStorage.getItem("token");
-  const swiperRef = useRef(null);
-  const [centerIndex, setCenterIndex] = useState(0);
 
   useEffect(() => {
     const fetchVendorOrders = async () => {
@@ -29,28 +26,12 @@ const VendorOrdersPage = () => {
           },
         });
         setOrders(response.data.data);
-        console.log(orders);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
     fetchVendorOrders();
-  }, []);
-  const goNext = () => {
-    if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slideNext();
-    }
-  };
-
-  const goPrev = () => {
-    if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slidePrev();
-    }
-  };
-
-  const handleSlideChange = (swiper) => {
-    setCenterIndex(swiper.realIndex + 1);
-  };
+  }, [token]);
 
   return (
     <Box>
@@ -131,26 +112,18 @@ const VendorOrdersPage = () => {
             {Array.isArray(orders) && orders.length > 0 ? (
               <Box mt={20}>
                 <Swiper
-                  xs={6}
-                  md={6}
-                  lg={3}
-                  ref={swiperRef}
                   modules={[Navigation, Pagination, Scrollbar, A11y]}
                   slidesPerView={1}
-                  loop={true}
-                  onSlideChange={handleSlideChange}
+                  loop={orders.length > 1}
                 >
-                  <Grid container>
-                    {orders.map((order, index) => (
-                      <Grid item key={index} xs={12} mb={5}>
-                        <SwiperSlide>
-                          <VendorOrderCard data={order} />
-                        </SwiperSlide>
-                      </Grid>
-                    ))}
-                  </Grid>
+                  {orders.map((order, index) => (
+                    <SwiperSlide key={order._id || index}>
+                      <Box mb={5}>
+                        <VendorOrderCard data={order} />
+                      </Box>
+                    </SwiperSlide>
+                  ))}
                 </Swiper>
-                {/* Pagination buttons */}
               </Box>
             ) : (
               <Typography
