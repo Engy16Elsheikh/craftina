@@ -2,7 +2,6 @@ import AboutInfo from "../Components/aboutInfo";
 import Categories from "../Components/categories";
 import HomeHeader from "../Components/Home/homeHeader";
 import OrderServiceSteps from "../Components/orderServiceSteps";
-import Footer from "../Components/footer";
 import PopularServices from "../Components/popularServices";
 import PopularProducts from "../Components/popularProducts";
 import { useRef } from "react";
@@ -37,7 +36,7 @@ const HomePage = () => {
       <PopularProducts />
       <AboutInfo />
       {/* <button onClick={handleLogout}>Logout</button> */}
-      <Footer />
+     
     </>
   );
 };

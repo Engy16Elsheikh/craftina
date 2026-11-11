@@ -6,33 +6,36 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import React, { useRef, useState, useEffect } from "react";
-import { Card, CardMedia, Box, Typography, Grid } from "@mui/material";
+import { Card, CardMedia, Box, Typography } from "@mui/material";
 
 import { getServicesCategories } from "../api/categoriesApi";
 
+// Shown when a category photo fails to load (e.g. placeholder URLs)
+const FALLBACK_IMAGE =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'>
+       <rect width='100%' height='100%' fill='#5B86E5'/>
+     </svg>`
+  );
+
 const Categories = React.forwardRef((props, ref) => {
   const [serviceCategories, setServiceCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
   const swiperRef = useRef(null);
 
   useEffect(() => {
     getServicesCategories()
       .then((res) => {
-        setServiceCategories(res.data);
+        console.log("categories:", res.data);
+        setServiceCategories(Array.isArray(res.data) ? res.data : []);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("categories error:", err))
+      .finally(() => setLoading(false));
   }, []);
 
-  const goNext = () => {
-    if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slideNext();
-    }
-  };
-
-  const goPrev = () => {
-    if (swiperRef.current && swiperRef.current.swiper) {
-      swiperRef.current.swiper.slidePrev();
-    }
-  };
+  const goNext = () => swiperRef.current?.swiper?.slideNext();
+  const goPrev = () => swiperRef.current?.swiper?.slidePrev();
 
   return (
     <Box
@@ -75,75 +78,83 @@ const Categories = React.forwardRef((props, ref) => {
           التصنيفات
         </Typography>
       </Box>
+
       <Box
         sx={{
-          height: "30vh",
+          minHeight: "30vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           marginRight: "4vw",
         }}
       >
-        <Swiper
-          ref={swiperRef}
-          modules={[Navigation, Pagination, Scrollbar, A11y]}
-          loop={true}
-          breakpoints={{
-            0: {
-              slidesPerView: 2,
-            },
-            600: {
-              slidesPerView: 2,
-            },
-            960: {
-              slidesPerView: 4,
-            },
-          }}
-        >
-          {/* Swiper slides go here */}
-          <Grid container>
-            {serviceCategories.map((Categorie) => (
-              <SwiperSlide key={Categorie._id || Categorie.name}>
-                <Grid item>
-                  <Card
+        {loading ? (
+          <Typography>جاري التحميل...</Typography>
+        ) : serviceCategories.length === 0 ? (
+          <Typography>لا توجد تصنيفات حالياً</Typography>
+        ) : (
+          <Swiper
+            ref={swiperRef}
+            modules={[Navigation, Pagination, Scrollbar, A11y]}
+            // loop only works when there are more slides than slidesPerView
+            loop={serviceCategories.length > 4}
+            style={{ width: "100%" }}
+            breakpoints={{
+              0: { slidesPerView: 2 },
+              600: { slidesPerView: 2 },
+              960: { slidesPerView: 4 },
+            }}
+          >
+            {serviceCategories.map((category) => (
+              <SwiperSlide key={category._id || category.name}>
+                <Card
+                  sx={{
+                    height: "22vh",
+                    position: "relative",
+                    ml: "1.5em",
+                    mr: { xs: "10%", md: "2%" },
+                  }}
+                >
+                  <Box
                     sx={{
-                      height: "22vh",
-                      width: "80",
-                      position: "relative",
-                      ml: "1.5em",
-                      mr: { xs: "10%", md: "2%" },
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      zIndex: 1,
+                      color: "white",
+                      textAlign: "center",
+                      height: "100%",
+                      backgroundColor: "rgb(50,50,50,.3)",
                     }}
                   >
-                    <Box
+                    <Typography
                       sx={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        color: "white",
-                        textAlign: "center",
-                        height: "100%",
-                        backgroundColor: "rgb(50,50,50,.3)",
+                        fontSize: "2rem",
+                        marginTop: "5vh",
+                        textShadow: "0 1px 4px rgba(0,0,0,0.6)",
                       }}
                     >
-                      <Typography sx={{ fontSize: "2rem", marginTop: "5vh" }}>
-                        {Categorie.name}
-                      </Typography>
-                    </Box>
-                    <CardMedia
-                      component="img"
-                      height="100%"
-                      width="100%"
-                      image={Categorie.photo}
-                      alt={Categorie.name}
-                    />
-                  </Card>
-                </Grid>
+                      {category.name}
+                    </Typography>
+                  </Box>
+                  <CardMedia
+                    component="img"
+                    sx={{ height: "100%", width: "100%", objectFit: "cover" }}
+                    image={category.photo || FALLBACK_IMAGE}
+                    alt={category.name}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = FALLBACK_IMAGE;
+                    }}
+                  />
+                </Card>
               </SwiperSlide>
             ))}
-          </Grid>
-        </Swiper>
+          </Swiper>
+        )}
       </Box>
+
       <IconButton
         sx={{
           position: "absolute",
